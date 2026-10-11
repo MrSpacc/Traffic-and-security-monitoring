@@ -11,7 +11,7 @@ WEB_PORT = 8090
 
 # Укажите пароль здесь или через переменную окружения ANTI_DDOS_PANEL_PASSWORD.
 # Пока значение пустое, вход в панель закрыт.
-PANEL_PASSWORD = os.environ.get("ANTI_DDOS_PANEL_PASSWORD", "root2root")
+PANEL_PASSWORD = os.environ.get("ANTI_DDOS_PANEL_PASSWORD", "pass")
 
 # Пороговые значения защиты. Подстройте их под обычную нагрузку сайта.
 HTTP_FLOOD_REQUESTS = 120
