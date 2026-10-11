@@ -1,0 +1,3 @@
+const style=document.createElement('link');style.rel='stylesheet';style.href='/static/login.css';document.head.append(style);
+const form=document.querySelector('#login-form'),error=document.querySelector('#login-error');
+form.addEventListener('submit',async event=>{event.preventDefault();error.textContent='';const button=form.querySelector('button');button.disabled=true;try{const response=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.querySelector('#password').value})}),data=await response.json();if(!response.ok)throw Error(data.error||'Ошибка входа');location.href='/'}catch(e){error.textContent=e.message}finally{button.disabled=false}});
