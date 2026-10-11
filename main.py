@@ -1,5 +1,5 @@
 from config import (
-    ADMIN_TOKEN, AUTH_LOG_FILE, BAN_THRESHOLD, DATABASE_FILE, HTTP_FLOOD_REQUESTS,
+    PANEL_PASSWORD, AUTH_LOG_FILE, BAN_THRESHOLD, DATABASE_FILE, HTTP_FLOOD_REQUESTS,
     HTTP_FLOOD_WINDOW, LOG_FILE, POLL_INTERVAL, SCAN_ERRORS, SCAN_WINDOW,
     SSH_BRUTE_ATTEMPTS, SSH_BRUTE_WINDOW, TRUSTED_NETWORKS,
     WEB_BRUTE_ATTEMPTS, WEB_BRUTE_WINDOW, WEB_HOST, WEB_PORT,
@@ -7,7 +7,6 @@ from config import (
 from auth_monitor import AuthLogMonitor
 from database import MetricsDatabase
 from firewall import UfwFirewall
-from log_parser import analyze_nginx_403
 from monitor import LogMonitor
 from security import SecurityEngine
 from web_server import create_server
@@ -23,11 +22,11 @@ def main():
     })
     monitor = LogMonitor(LOG_FILE, database, security, POLL_INTERVAL)
     auth_monitor = AuthLogMonitor(AUTH_LOG_FILE, database, security, POLL_INTERVAL)
-    server = create_server(WEB_HOST, WEB_PORT, database, firewall, ADMIN_TOKEN)
+    server = create_server(WEB_HOST, WEB_PORT, database, firewall, PANEL_PASSWORD)
     print(firewall.status_message())
     print(f"Чтение лога: {LOG_FILE}")
     print(f"Панель открыта: http://{WEB_HOST}:{WEB_PORT}")
-    print("Ручное управление: " + ("включено" if ADMIN_TOKEN else "отключено — задайте ANTI_DDOS_ADMIN_TOKEN"))
+    print("Вход в панель: " + ("защищён паролем" if PANEL_PASSWORD else "закрыт — задайте ANTI_DDOS_PANEL_PASSWORD"))
     print("Для остановки нажмите Ctrl+C")
     monitor.start()
     auth_monitor.start()

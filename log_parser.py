@@ -1,5 +1,6 @@
 from collections import Counter
 from datetime import datetime, timezone
+from functools import lru_cache
 import re
 
 NGINX_PATTERN = re.compile(
@@ -8,6 +9,11 @@ NGINX_PATTERN = re.compile(
     r'(?:\s+"(?P<referer>[^"]*)"\s+"(?P<user_agent>[^"]*)")?'
 )
 
+@lru_cache(maxsize=4096)
+def parse_timestamp(value):
+    # Nginx timestamps have second precision: reuse conversion within each second.
+    return datetime.strptime(value, "%d/%b/%Y:%H:%M:%S %z").astimezone(timezone.utc).isoformat()
+
 def parse_nginx_line(line):
     match = NGINX_PATTERN.match(line.strip())
     if not match:
@@ -15,7 +21,7 @@ def parse_nginx_line(line):
     data = match.groupdict()
     parts = data["request"].split(maxsplit=2)
     try:
-        occurred_at = datetime.strptime(data["time"], "%d/%b/%Y:%H:%M:%S %z").astimezone(timezone.utc).isoformat()
+        occurred_at = parse_timestamp(data["time"])
     except ValueError:
         occurred_at = datetime.now(timezone.utc).isoformat()
     return {

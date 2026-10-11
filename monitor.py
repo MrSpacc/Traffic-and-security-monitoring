@@ -4,7 +4,7 @@ import threading
 from log_parser import parse_nginx_line
 
 class LogMonitor(threading.Thread):
-    def __init__(self, log_path, database, security, poll_interval=0.2):
+    def __init__(self, log_path, database, security, poll_interval=0.05):
         super().__init__(name="nginx-log-monitor", daemon=True)
         self.log_path, self.database, self.security = log_path, database, security
         self.poll_interval = poll_interval

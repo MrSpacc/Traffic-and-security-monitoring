@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent
 LOG_FILE = Path(os.environ.get("NGINX_ACCESS_LOG", str(BASE_DIR / "access.log")))
 DATABASE_FILE = BASE_DIR / "metrics.db"
 BAN_THRESHOLD = 50
-POLL_INTERVAL = 0.2
+POLL_INTERVAL = 0.05
 WEB_HOST = "127.0.0.1"
 WEB_PORT = 8090
 
